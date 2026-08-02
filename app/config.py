@@ -7,6 +7,7 @@ if a required secret is missing in production, the app fails to boot rather
 than falling back to an insecure default.
 """
 from functools import lru_cache
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -15,6 +16,10 @@ class Settings(BaseSettings):
 
     # --- Environment ---
     environment: str = "development"  # "development" | "production"
+    # Accepts either ENVIRONMENT=production or IS_PRODUCTION=true, since
+    # deployment docs have referenced both -- honor whichever was actually set
+    # rather than silently ignoring one of them.
+    is_production_flag: bool = Field(default=False, validation_alias="IS_PRODUCTION")
 
     # --- Database ---
     # Render injects DATABASE_URL as postgres://... ; SQLAlchemy's async driver
@@ -40,7 +45,7 @@ class Settings(BaseSettings):
 
     @property
     def is_production(self) -> bool:
-        return self.environment.lower() == "production"
+        return self.is_production_flag or self.environment.lower() == "production"
 
     @property
     def normalized_database_url(self) -> str:
