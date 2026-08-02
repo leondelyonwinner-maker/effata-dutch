@@ -1,0 +1,29 @@
+{% if not card %}
+<div class="review-empty" id="review-card">
+  <p>Nothing due right now. Come back later, or keep learning new material in Vocabulary and Grammar.</p>
+</div>
+{% else %}
+<div class="review-card" id="review-card">
+  <div class="review-type">{{ "Vocabulary" if card_type == "vocab" else "Grammar" }}</div>
+  <div class="review-front">{{ front }}</div>
+
+  <details class="review-reveal">
+    <summary>Show answer</summary>
+    <div class="review-back">{{ back }}</div>
+
+    <p class="review-grade-label">How well did you recall this?</p>
+    <form
+      hx-post="/memory/card/{{ card.id }}/grade"
+      hx-target="#review-card"
+      hx-swap="outerHTML">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <div class="grade-buttons">
+        <button type="submit" name="grade" value="0" class="grade-fail">Blackout</button>
+        <button type="submit" name="grade" value="2" class="grade-hard">Hard</button>
+        <button type="submit" name="grade" value="4" class="grade-good">Good</button>
+        <button type="submit" name="grade" value="5" class="grade-easy">Easy</button>
+      </div>
+    </form>
+  </details>
+</div>
+{% endif %}

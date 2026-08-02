@@ -1,0 +1,164 @@
+:root {
+  --bg: #f6f4ee;
+  --surface: #ffffff;
+  --ink: #1b1b1b;
+  --muted: #6b6b6b;
+  --brand: #1b3a2f;
+  --brand-light: #2f5c48;
+  --accent: #c8752f;
+  --error: #b3261e;
+  --success: #1e6b3e;
+  --border: #e4e0d6;
+  --radius: 12px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 3rem;
+}
+
+h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
+h2 { font-size: 1.25rem; margin-top: 1.75rem; }
+h3 { font-size: 1.05rem; color: var(--brand-light); }
+.subtitle { color: var(--muted); margin-top: 0; }
+
+/* Navigation */
+.topnav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--brand);
+  color: #fff;
+  padding: 0.75rem 1rem;
+  padding-top: calc(0.75rem + env(safe-area-inset-top));
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.topnav .brand { color: #fff; font-weight: 700; text-decoration: none; margin-right: auto; }
+.navlinks { display: flex; gap: 0.9rem; flex-wrap: wrap; }
+.navlinks a { color: #d9e6df; text-decoration: none; font-size: 0.92rem; }
+.navlinks a:hover { color: #fff; }
+.logout-form { margin: 0; }
+.link-button {
+  background: none; border: none; color: #d9e6df; font-size: 0.92rem; cursor: pointer; padding: 0;
+}
+
+/* Auth */
+.auth-card {
+  max-width: 360px;
+  margin: 3rem auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  text-align: center;
+}
+.auth-card form { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem; }
+.auth-card label { text-align: left; font-size: 0.85rem; color: var(--muted); }
+
+input[type="text"], input[type="password"] {
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 100%;
+}
+
+button {
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+button:hover { background: var(--brand-light); }
+
+.error { color: var(--error); font-size: 0.9rem; }
+
+/* Callouts */
+.callout {
+  display: block;
+  background: var(--accent);
+  color: #fff;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius);
+  text-decoration: none;
+  margin: 1rem 0;
+}
+.callout-muted { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
+
+/* Roadmap */
+.week-list { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem; }
+.week-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+}
+.week-number { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); font-weight: 700; }
+.module-focus { font-size: 0.85rem; color: var(--muted); margin-bottom: 0; }
+
+/* Vocabulary */
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.75rem; margin-bottom: 1.5rem; }
+.vocab-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; }
+.vocab-dutch { font-size: 1.15rem; font-weight: 700; color: var(--brand); }
+.vocab-ipa { color: var(--accent); font-family: "SF Mono", Menlo, monospace; font-size: 0.9rem; }
+.vocab-english { color: var(--muted); margin-bottom: 0.5rem; }
+.vocab-tip, .vocab-example, .vocab-context { font-size: 0.85rem; margin: 0.3rem 0; }
+
+/* Grammar */
+.grammar-topic { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1.25rem; }
+.grammar-explanation { line-height: 1.6; }
+.common-mistakes { margin-top: 0.75rem; font-size: 0.9rem; }
+.exercise-card { border-top: 1px dashed var(--border); padding-top: 0.75rem; margin-top: 0.75rem; }
+.exercise-prompt { font-weight: 600; }
+.choice { display: block; margin: 0.3rem 0; font-size: 0.95rem; }
+.exercise-result { margin-top: 0.5rem; font-size: 0.9rem; }
+.result-correct { color: var(--success); }
+.result-incorrect { color: var(--error); }
+
+/* Conversation */
+.chat-log { display: flex; flex-direction: column; gap: 0.6rem; max-height: 55vh; overflow-y: auto; padding: 0.5rem 0; }
+.chat-message { max-width: 85%; padding: 0.6rem 0.85rem; border-radius: 14px; }
+.chat-role { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; opacity: 0.7; }
+.chat-message p { margin: 0.15rem 0 0; white-space: pre-wrap; }
+.chat-user { align-self: flex-end; background: var(--brand); color: #fff; }
+.chat-coach { align-self: flex-start; background: var(--surface); border: 1px solid var(--border); }
+.chat-error { align-self: flex-start; background: #fce8e6; color: var(--error); }
+.chat-form { display: flex; gap: 0.5rem; margin-top: 0.75rem; position: sticky; bottom: 0.5rem; }
+.chat-form input { flex: 1; }
+
+/* Pronunciation */
+.pronunciation-result { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; margin-top: 1rem; }
+.htmx-indicator { display: none; color: var(--muted); font-size: 0.85rem; margin-top: 0.4rem; }
+.htmx-request .htmx-indicator, .htmx-request.htmx-indicator { display: block; }
+
+/* Memory / review */
+.review-card, .review-empty { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; text-align: center; margin-top: 1rem; }
+.review-type { font-size: 0.75rem; text-transform: uppercase; color: var(--accent); font-weight: 700; }
+.review-front { font-size: 1.6rem; font-weight: 700; margin: 0.75rem 0; }
+.review-back { font-size: 1.05rem; margin: 0.75rem 0; color: var(--brand-light); }
+.review-grade-label { font-size: 0.85rem; color: var(--muted); }
+.grade-buttons { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
+.grade-fail { background: var(--error); }
+.grade-hard { background: var(--accent); }
+.grade-good { background: var(--brand); }
+.grade-easy { background: var(--success); }
+
+.empty-state { color: var(--muted); font-style: italic; }

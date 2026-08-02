@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Conversation — Effata Dutch{% endblock %}
+{% block content %}
+<h1>Conversation Simulator</h1>
+<p class="subtitle">Chat with Coach Effata in Dutch. Current level: <strong>{{ session.difficulty.value }}</strong></p>
+
+<div id="chat-log" class="chat-log">
+  {% for message in session.messages %}
+    {% include "partials/_single_message.html" %}
+  {% endfor %}
+</div>
+
+<form
+  id="chat-form"
+  hx-post="/conversation/{{ session.id }}/message"
+  hx-target="#chat-log"
+  hx-swap="beforeend"
+  class="chat-form">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <input type="text" name="content" placeholder="Typ in het Nederlands..." required maxlength="2000" autocomplete="off">
+  <button type="submit">Send</button>
+</form>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/chat.js"></script>
+{% endblock %}

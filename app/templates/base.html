@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1b3a2f">
+  <title>{% block title %}Effata Dutch{% endblock %}</title>
+
+  <!-- iOS PWA / home-screen install support (iOS 26+, Safari & Chrome) -->
+  <link rel="manifest" href="/static/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/static/icons/icon-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Effata Dutch">
+
+  <link rel="stylesheet" href="/static/css/style.css">
+  <!-- Pinned version, no SRI hash: unpkg serves htmx.org's published dist as-is,
+       but hand-typing an integrity hash here without verifying it against the
+       actual bytes would be worse than omitting it (silent load failure on
+       mismatch). Swap to a self-hosted /static/js/htmx.min.js + SRI hash if
+       you want to remove the CDN dependency entirely. -->
+  <script src="https://unpkg.com/htmx.org@2.0.4" crossorigin="anonymous"></script>
+</head>
+<body>
+  {% if request.cookies.get(session_cookie_name) %}
+  <nav class="topnav">
+    <a href="/" class="brand">Effata Dutch</a>
+    <div class="navlinks">
+      <a href="/">Roadmap</a>
+      <a href="/vocabulary">Vocabulary</a>
+      <a href="/grammar">Grammar</a>
+      <a href="/conversation">Conversation</a>
+      <a href="/pronunciation">Pronunciation</a>
+      <a href="/memory">Review</a>
+    </div>
+    <form action="/logout" method="post" class="logout-form">
+      <button type="submit" class="link-button">Log out</button>
+    </form>
+  </nav>
+  {% endif %}
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

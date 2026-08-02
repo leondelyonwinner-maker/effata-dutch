@@ -1,0 +1,338 @@
+{
+  "communities": {
+    "0": [
+      "app_db",
+      "app_db_base",
+      "app_db_init_models",
+      "app_db_rationale_1",
+      "app_db_rationale_36",
+      "app_models",
+      "app_models_conversationdifficulty",
+      "app_models_curriculumweek",
+      "app_models_grammarexercise",
+      "app_models_grammartopic",
+      "app_models_messagerole",
+      "app_models_rationale_1",
+      "app_models_vocabitem",
+      "app_models_vocabtheme",
+      "app_routers_vocabulary",
+      "app_routers_vocabulary_py_asyncsession",
+      "app_routers_vocabulary_py_request",
+      "app_routers_vocabulary_vocabulary_index",
+      "app_seed",
+      "app_seed_data",
+      "app_seed_data_rationale_1",
+      "app_seed_rationale_1",
+      "app_seed_seed",
+      "declarativebase",
+      "str"
+    ],
+    "1": [
+      "app_auth_hash_passcode",
+      "app_cli",
+      "app_cli_main",
+      "app_cli_rationale_1",
+      "app_static_icons_icon",
+      "deepseek_api",
+      "postgres",
+      "readme",
+      "render",
+      "requirements",
+      "requirements_aiosqlite",
+      "requirements_asyncpg",
+      "requirements_bcrypt",
+      "requirements_fastapi",
+      "requirements_httpx",
+      "requirements_itsdangerous",
+      "requirements_jinja2",
+      "requirements_passlib",
+      "requirements_pydantic",
+      "requirements_pydantic_settings",
+      "requirements_python_multipart",
+      "requirements_sqlalchemy",
+      "requirements_uvicorn",
+      "sqlite"
+    ],
+    "2": [
+      "app_auth",
+      "app_auth_client_ip",
+      "app_auth_create_session_token",
+      "app_auth_is_authenticated",
+      "app_auth_is_ip_locked_out",
+      "app_auth_py_asyncsession",
+      "app_auth_py_request",
+      "app_auth_rationale_1",
+      "app_auth_read_session_token",
+      "app_auth_record_login_attempt",
+      "app_auth_require_login",
+      "app_auth_verify_csrf",
+      "app_auth_verify_passcode",
+      "app_db_get_db",
+      "app_db_py_asyncsession",
+      "app_models_loginattempt",
+      "app_models_rationale_183",
+      "app_routers_auth_router",
+      "app_routers_auth_router_login_form",
+      "app_routers_auth_router_login_submit",
+      "app_routers_auth_router_logout",
+      "app_routers_auth_router_py_asyncsession",
+      "app_routers_auth_router_py_request"
+    ],
+    "3": [
+      "app_auth_generate_csrf_token",
+      "app_deepseek_client",
+      "app_deepseek_client_chat_completion",
+      "app_deepseek_client_deepseekerror",
+      "app_deepseek_client_rationale_1",
+      "app_models_conversationmessage",
+      "app_models_conversationsession",
+      "app_routers_conversation",
+      "app_routers_conversation_conversation_page",
+      "app_routers_conversation_get_or_create_session",
+      "app_routers_conversation_next_difficulty",
+      "app_routers_conversation_py_asyncsession",
+      "app_routers_conversation_py_request",
+      "app_routers_conversation_send_message",
+      "app_routers_pronunciation",
+      "app_routers_pronunciation_check_pronunciation",
+      "app_routers_pronunciation_pronunciation_page",
+      "app_routers_pronunciation_py_request"
+    ],
+    "4": [
+      "app_main",
+      "app_main_assert_production_secrets_configured",
+      "app_main_healthz",
+      "app_main_lifespan",
+      "app_main_py_request",
+      "app_main_rationale_1",
+      "app_main_rationale_29",
+      "app_main_redirect_unauthenticated",
+      "app_main_security_headers",
+      "app_routers_dashboard",
+      "app_routers_dashboard_dashboard",
+      "app_routers_dashboard_py_asyncsession",
+      "app_routers_dashboard_py_request",
+      "fastapi",
+      "runtimeerror",
+      "starlettehttpexception"
+    ],
+    "5": [
+      "app_models_rationale_145",
+      "app_models_reviewlog",
+      "app_models_srscard",
+      "app_models_utcnow",
+      "app_routers_memory",
+      "app_routers_memory_card_context",
+      "app_routers_memory_due_card",
+      "app_routers_memory_grade_card",
+      "app_routers_memory_py_asyncsession",
+      "app_routers_memory_py_request",
+      "app_routers_memory_review_queue",
+      "app_srs",
+      "app_srs_rationale_1",
+      "app_srs_schedule_next_review",
+      "datetime"
+    ],
+    "6": [
+      "app_static_icons_icon_180",
+      "app_templates_base",
+      "app_templates_conversation",
+      "app_templates_dashboard",
+      "app_templates_grammar",
+      "app_templates_login",
+      "app_templates_memory",
+      "app_templates_partials__single_message",
+      "app_templates_partials_conversation_turn",
+      "app_templates_partials_pronunciation_result",
+      "app_templates_partials_review_card",
+      "app_templates_pronunciation",
+      "app_templates_vocabulary",
+      "htmx",
+      "sm2_algorithm"
+    ],
+    "7": [
+      "app_config",
+      "app_config_get_settings",
+      "app_config_rationale_1",
+      "app_config_settings",
+      "app_config_settings_is_production",
+      "app_config_settings_normalized_database_url",
+      "app_routers_grammar",
+      "app_routers_grammar_check_exercise",
+      "app_routers_grammar_grammar_index",
+      "app_routers_grammar_py_asyncsession",
+      "app_routers_grammar_py_request",
+      "app_templating",
+      "app_templating_rationale_1",
+      "basesettings"
+    ],
+    "8": [
+      "scripts_generate_icons",
+      "scripts_generate_icons_main",
+      "scripts_generate_icons_rationale_1"
+    ],
+    "9": [
+      "app_init"
+    ],
+    "10": [
+      "app_routers_init"
+    ],
+    "11": [
+      "app_static_js_chat"
+    ],
+    "12": [
+      "app_templates_partials_exercise_result"
+    ]
+  },
+  "cohesion": {
+    "0": 0.16666666666666666,
+    "1": 0.11956521739130435,
+    "2": 0.17391304347826086,
+    "3": 0.23529411764705882,
+    "4": 0.15833333333333333,
+    "5": 0.2761904761904762,
+    "6": 0.13333333333333333,
+    "7": 0.2087912087912088,
+    "8": 0.6666666666666666,
+    "9": 1.0,
+    "10": 1.0,
+    "11": 1.0,
+    "12": 1.0
+  },
+  "gods": [
+    {
+      "id": "app_db_base",
+      "label": "Base",
+      "degree": 15
+    },
+    {
+      "id": "requirements",
+      "label": "Python Dependencies (requirements.txt)",
+      "degree": 14
+    },
+    {
+      "id": "readme",
+      "label": "Effata Dutch README",
+      "degree": 13
+    },
+    {
+      "id": "app_auth_generate_csrf_token",
+      "label": "generate_csrf_token()",
+      "degree": 12
+    },
+    {
+      "id": "app_auth_verify_csrf",
+      "label": "verify_csrf()",
+      "degree": 12
+    },
+    {
+      "id": "app_config_get_settings",
+      "label": "get_settings()",
+      "degree": 12
+    },
+    {
+      "id": "app_models_srscard",
+      "label": "SRSCard",
+      "degree": 12
+    },
+    {
+      "id": "app_models_curriculumweek",
+      "label": "CurriculumWeek",
+      "degree": 10
+    },
+    {
+      "id": "app_auth_require_login",
+      "label": "require_login()",
+      "degree": 9
+    },
+    {
+      "id": "app_db_get_db",
+      "label": "get_db()",
+      "degree": 9
+    }
+  ],
+  "surprises": [
+    {
+      "source": "Effata Dutch README",
+      "target": "Effata Dutch App Icon (icon.svg)",
+      "source_files": [
+        "README.md",
+        "app/static/icons/icon.svg"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "crosses file types (doc ↔ image); connects across different repos/directories; peripheral node `Effata Dutch App Icon (icon.svg)` unexpectedly reaches hub `Effata Dutch README`"
+    },
+    {
+      "source": "Effata Dutch README",
+      "target": "itsdangerous 2.2.0",
+      "source_files": [
+        "README.md",
+        "requirements.txt"
+      ],
+      "confidence": "INFERRED",
+      "relation": "references",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; peripheral node `itsdangerous 2.2.0` unexpectedly reaches hub `Effata Dutch README`"
+    },
+    {
+      "source": "Effata Dutch README",
+      "target": "bcrypt 4.0.1",
+      "source_files": [
+        "README.md",
+        "requirements.txt"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "connects across different repos/directories; peripheral node `bcrypt 4.0.1` unexpectedly reaches hub `Effata Dutch README`"
+    },
+    {
+      "source": "Effata Dutch README",
+      "target": "FastAPI 0.115.6",
+      "source_files": [
+        "README.md",
+        "requirements.txt"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "connects across different repos/directories; peripheral node `FastAPI 0.115.6` unexpectedly reaches hub `Effata Dutch README`"
+    },
+    {
+      "source": "Effata Dutch README",
+      "target": "Jinja2 3.1.5",
+      "source_files": [
+        "README.md",
+        "requirements.txt"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "connects across different repos/directories; peripheral node `Jinja2 3.1.5` unexpectedly reaches hub `Effata Dutch README`"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `Effata Dutch README` connect `Project Setup & CLI` to `UI Templates`?",
+      "why": "High betweenness centrality (0.351) - this node is a cross-community bridge."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 12 inferred relationships involving `Base` (e.g. with `ConversationDifficulty` and `ConversationMessage`) actually correct?",
+      "why": "`Base` has 12 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `Effata Dutch App Icon (icon.svg)`, `Roadmap Dashboard Template`, `Grammar Simplifier Template` to the rest of the system?",
+      "why": "15 weakly-connected nodes found - possible documentation gaps or missing edges."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Project Setup & CLI` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.11956521739130435 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `UI Templates` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.13333333333333333 - nodes in this community are weakly interconnected."
+    }
+  ]
+}

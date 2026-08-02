@@ -1,0 +1,17 @@
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+sqlalchemy==2.0.36
+asyncpg==0.30.0
+aiosqlite==0.20.0
+httpx==0.28.1
+jinja2==3.1.5
+python-multipart==0.0.20
+# bcrypt is pinned <4.1: passlib 1.7.4's bcrypt backend probes
+# `bcrypt.__about__.__version__`, which was removed in bcrypt 4.1+, and
+# raises/misdetects on newer versions. 4.0.1 is the last release compatible
+# with passlib's version probe.
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
+itsdangerous==2.2.0
+pydantic==2.10.5
+pydantic-settings==2.7.1

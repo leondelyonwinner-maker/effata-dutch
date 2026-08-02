@@ -1,0 +1,32 @@
+# Render Blueprint for Effata Dutch.
+# Deploy: connect this repo in the Render dashboard -> "New Blueprint Instance".
+# Mirrors the Garmin Health project's pattern: one web service + one managed Postgres.
+services:
+  - type: web
+    name: effata-dutch
+    runtime: python
+    plan: starter
+    region: frankfurt
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    # Seed the curriculum once per deploy; idempotent, so redeploys are safe.
+    preDeployCommand: "python -m app.seed"
+    healthCheckPath: /healthz
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: effata-dutch-db
+          property: connectionString
+      - key: SESSION_SECRET_KEY
+        generateValue: true
+      - key: APP_PASSCODE_HASH
+        sync: false # set manually: output of `python -m app.cli hash-passcode "..."`
+      - key: DEEPSEEK_API_KEY
+        sync: false # set manually in the Render dashboard, never committed
+
+databases:
+  - name: effata-dutch-db
+    plan: free
+    region: frankfurt

@@ -1,0 +1,5 @@
+{% if is_correct %}
+<p class="result-correct">Correct! {{ explanation }}</p>
+{% else %}
+<p class="result-incorrect">Not quite. The correct answer is <strong>{{ correct_choice }}</strong>. {{ explanation }}</p>
+{% endif %}

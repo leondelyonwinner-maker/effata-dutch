@@ -1,0 +1,26 @@
+{% if error %}
+<p class="error" role="alert">{{ error }}</p>
+{% elif result %}
+<div class="pronunciation-result">
+  <p><strong>IPA:</strong> {{ result.ipa }}</p>
+  <p><strong>Syllables / stress:</strong> {{ result.syllables }}</p>
+
+  {% if result.tricky_sounds %}
+  <h4>Tricky sounds</h4>
+  <ul>
+    {% for item in result.tricky_sounds %}
+    <li><strong>{{ item.sound }}:</strong> {{ item.tip }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if result.common_errors %}
+  <h4>Common errors for English speakers</h4>
+  <ul>
+    {% for err in result.common_errors %}
+    <li>{{ err }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+{% endif %}

@@ -1,0 +1,14 @@
+{
+  "name": "Effata Dutch",
+  "short_name": "Effata Dutch",
+  "description": "Personal Dutch language coach: vocabulary, grammar, conversation, pronunciation, and spaced-repetition review.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6f4ee",
+  "theme_color": "#1b3a2f",
+  "icons": [
+    { "src": "/static/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/static/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/static/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

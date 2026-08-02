@@ -1,0 +1,12 @@
+{% set message = user_message %}
+{% include "partials/_single_message.html" %}
+
+{% if coach_message %}
+  {% set message = coach_message %}
+  {% include "partials/_single_message.html" %}
+{% elif error %}
+<div class="chat-message chat-error">
+  <span class="chat-role">Coach Effata</span>
+  <p>{{ error }}</p>
+</div>
+{% endif %}

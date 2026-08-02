@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Vocabulary — Effata Dutch{% endblock %}
+{% block content %}
+<h1>Core Vocabulary Accelerator</h1>
+
+{% if not weeks %}
+<p class="empty-state">No vocabulary loaded yet. Run <code>python -m app.seed</code>.</p>
+{% endif %}
+
+{% for week in weeks %}
+<section class="week-section">
+  <h2>Week {{ week.week_number }} — {{ week.title }}</h2>
+  {% for theme in week.vocab_themes %}
+  <h3>{{ theme.name }}</h3>
+  <div class="vocab-grid">
+    {% for item in theme.items %}
+    <div class="vocab-card">
+      <div class="vocab-dutch">{{ item.dutch }}</div>
+      <div class="vocab-ipa">{{ item.ipa }}</div>
+      <div class="vocab-english">{{ item.english }}</div>
+      {% if item.pronunciation_tip %}
+      <p class="vocab-tip"><strong>Pronunciation:</strong> {{ item.pronunciation_tip }}</p>
+      {% endif %}
+      {% if item.example_nl %}
+      <p class="vocab-example">{{ item.example_nl }}<br><em>{{ item.example_en }}</em></p>
+      {% endif %}
+      {% if item.usage_context %}
+      <p class="vocab-context">{{ item.usage_context }}</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</section>
+{% endfor %}
+{% endblock %}

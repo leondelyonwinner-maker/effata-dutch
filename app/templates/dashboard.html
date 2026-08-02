@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Roadmap — Effata Dutch{% endblock %}
+{% block content %}
+<h1>10-Week Fluency Roadmap</h1>
+<p class="subtitle">Beginner &rarr; conversational fluency for relocation, work, travel, and preaching.</p>
+
+{% if due_count > 0 %}
+<a href="/memory" class="callout">
+  <strong>{{ due_count }}</strong> card{{ "s" if due_count != 1 else "" }} due for review right now &rarr;
+</a>
+{% else %}
+<div class="callout callout-muted">No reviews due right now. Nice work staying on top of it.</div>
+{% endif %}
+
+<div class="week-list">
+  {% for week in weeks %}
+  <div class="week-card">
+    <div class="week-number">Week {{ week.week_number }}</div>
+    <h2>{{ week.title }}</h2>
+    <p>{{ week.goal }}</p>
+    <p class="module-focus">{{ week.module_focus }}</p>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

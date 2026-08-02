@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Grammar — Effata Dutch{% endblock %}
+{% block content %}
+<h1>Grammar Simplifier</h1>
+
+{% if not weeks %}
+<p class="empty-state">No grammar topics loaded yet. Run <code>python -m app.seed</code>.</p>
+{% endif %}
+
+{% for week in weeks %}
+<section class="week-section">
+  <h2>Week {{ week.week_number }} — {{ week.title }}</h2>
+  {% for topic in week.grammar_topics %}
+  <div class="grammar-topic">
+    <h3>{{ topic.title }}</h3>
+    <div class="grammar-explanation">{{ topic.explanation_md | replace("\n", "<br>") | safe }}</div>
+
+    {% if topic.common_mistakes_md %}
+    <details class="common-mistakes">
+      <summary>Common mistakes to avoid</summary>
+      <div>{{ topic.common_mistakes_md | replace("\n", "<br>") | safe }}</div>
+    </details>
+    {% endif %}
+
+    {% if topic.exercises %}
+    <h4>Practice</h4>
+    <div class="exercise-list">
+      {% for exercise in topic.exercises %}
+      <div class="exercise-card">
+        <p class="exercise-prompt">{{ exercise.prompt }}</p>
+        <form
+          hx-post="/grammar/exercise/{{ exercise.id }}/check"
+          hx-target="#result-{{ exercise.id }}"
+          hx-swap="innerHTML">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          {% for choice in exercise.choices_json | fromjson %}
+          <label class="choice">
+            <input type="radio" name="answer_index" value="{{ loop.index0 }}" required>
+            {{ choice }}
+          </label>
+          {% endfor %}
+          <button type="submit">Check</button>
+        </form>
+        <div id="result-{{ exercise.id }}" class="exercise-result"></div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+  {% endfor %}
+</section>
+{% endfor %}
+{% endblock %}

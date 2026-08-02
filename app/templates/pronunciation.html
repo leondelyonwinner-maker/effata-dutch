@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Pronunciation — Effata Dutch{% endblock %}
+{% block content %}
+<h1>Pronunciation Coach</h1>
+<p class="subtitle">Enter a Dutch word or short sentence for an IPA breakdown and mouth/tongue guidance.</p>
+
+<form
+  hx-post="/pronunciation/check"
+  hx-target="#pronunciation-result"
+  hx-swap="innerHTML"
+  hx-indicator="#pronunciation-loading">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <input type="text" name="text" placeholder="e.g. huisje, ui, Scheveningen" required maxlength="300" value="{{ text }}">
+  <button type="submit">Check pronunciation</button>
+</form>
+
+<div id="pronunciation-loading" class="htmx-indicator">Coach Effata is listening&hellip;</div>
+<div id="pronunciation-result">
+  {% include "partials/pronunciation_result.html" %}
+</div>
+{% endblock %}
