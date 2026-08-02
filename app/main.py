@@ -17,7 +17,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.config import get_settings
 from app.db import init_models
-from app.routers import auth_router, conversation, dashboard, grammar, memory, pronunciation, vocabulary
+from app.routers import auth_router, conversation, dashboard, grammar, memory, progress, pronunciation, vocabulary
 
 settings = get_settings()
 
@@ -36,8 +36,6 @@ def _assert_production_secrets_configured() -> None:
         problems.append("SESSION_SECRET_KEY is missing or using the insecure default.")
     if len(settings.session_secret_key) < 32:
         problems.append("SESSION_SECRET_KEY is too short (use `secrets.token_urlsafe(48)`).")
-    if not settings.app_passcode_hash:
-        problems.append("APP_PASSCODE_HASH is not set.")
     if problems:
         raise RuntimeError(
             "Refusing to start in production with insecure configuration:\n- " + "\n- ".join(problems)
@@ -67,6 +65,7 @@ app.include_router(grammar.router)
 app.include_router(conversation.router)
 app.include_router(pronunciation.router)
 app.include_router(memory.router)
+app.include_router(progress.router)
 
 
 @app.middleware("http")

@@ -1,4 +1,7 @@
 <div class="chat-message chat-{{ message.role.value }}">
   <span class="chat-role">{{ "You" if message.role.value == "user" else "Coach Effata" }}</span>
   <p>{{ message.content }}</p>
+  {% if message.role.value == "coach" %}
+  <button type="button" class="tts-btn chat-tts-btn" data-speak-nl="{{ message.content }}">&#128266;</button>
+  {% endif %}
 </div>

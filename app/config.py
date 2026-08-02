@@ -22,10 +22,9 @@ class Settings(BaseSettings):
     database_url: str = "sqlite+aiosqlite:///./effata_dutch.db"
 
     # --- Auth ---
-    # bcrypt hash of the single-user passcode. Generate with:
-    #   python -m app.cli hash-passcode "your-passcode"
-    # Never store the plaintext passcode anywhere.
-    app_passcode_hash: str = ""
+    # Per-user bcrypt hashes now live in the `users` table (see app/models.py),
+    # not in an env var -- provision accounts with:
+    #   python -m app.cli create-user <username> "<Display Name>" "<passcode>"
     session_secret_key: str = "insecure-dev-secret-change-me"
     session_cookie_name: str = "effata_session"
     session_max_age_seconds: int = 60 * 60 * 24 * 30  # 30 days

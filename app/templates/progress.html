@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Voortgang — Effata Dutch{% endblock %}
+{% block content %}
+<h1>Voortgang</h1>
+
+<div class="stat-grid">
+  <div class="stat-tile">
+    <span class="stat-value">{{ streak_days }} hari</span>
+    <span class="stat-label">Streak</span>
+  </div>
+  <div class="stat-tile">
+    <span class="stat-value">{{ xp }}</span>
+    <span class="stat-label">Total XP</span>
+  </div>
+  <div class="stat-tile">
+    <span class="stat-value">{{ words_mastered }}/{{ total_words }}</span>
+    <span class="stat-label">Kata dikuasai</span>
+  </div>
+  <div class="stat-tile">
+    <span class="stat-value">{{ level }}</span>
+    <span class="stat-label">Level</span>
+  </div>
+</div>
+
+<div class="progress-block">
+  <div class="progress-label-row">
+    <span>Progress kurikulum</span>
+    <span>{{ done_weeks }}/{{ total_weeks }} minggu</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" style="width: {{ (done_weeks / total_weeks * 100) if total_weeks else 0 }}%"></div>
+  </div>
+</div>
+
+{% if pron_count > 0 %}
+<div class="progress-block">
+  <div class="progress-label-row">
+    <span>Akurasi pengucapan (rata-rata {{ pron_count }} percobaan)</span>
+    <span>{{ pron_avg }}%</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill progress-bar-accent" style="width: {{ pron_avg }}%"></div>
+  </div>
+  <span class="progress-footnote">Skor proxy berbasis kecocokan ASR — bukan pengukuran fonetik presisi.</span>
+</div>
+{% endif %}
+
+<div class="progress-block">
+  <span class="progress-label-row"><span>Kata yang sudah dipelajari</span></span>
+  <div class="word-tile-grid">
+    {% for item in all_vocab %}
+    <div class="word-tile {{ 'word-tile-mastered' if item.id in mastered_ids else '' }}" title="{{ item.dutch }}">
+      {{ item.dutch[:2] }}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

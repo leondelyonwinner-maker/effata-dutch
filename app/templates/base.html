@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#1b3a2f">
+  <meta name="theme-color" content="#17324D">
   <title>{% block title %}Effata Dutch{% endblock %}</title>
 
   <!-- iOS PWA / home-screen install support (iOS 26+, Safari & Chrome) -->
@@ -22,17 +22,22 @@
   <script src="https://unpkg.com/htmx.org@2.0.4" crossorigin="anonymous"></script>
 </head>
 <body>
-  {% if request.cookies.get(session_cookie_name) %}
-  <nav class="topnav">
-    <a href="/" class="brand">Effata Dutch</a>
-    <div class="navlinks">
-      <a href="/">Roadmap</a>
-      <a href="/vocabulary">Vocabulary</a>
-      <a href="/grammar">Grammar</a>
-      <a href="/conversation">Conversation</a>
-      <a href="/pronunciation">Pronunciation</a>
-      <a href="/memory">Review</a>
+  {% if request.state.user %}
+  <header class="topbar">
+    <div>
+      <h1 class="topbar-title">Nederlands Coach</h1>
+      <p class="topbar-subtitle">{{ request.state.user.display_name }}'s dagelijkse lespraktijk</p>
     </div>
+    <div class="streak-badge" title="Streak">
+      <span aria-hidden="true">&#128293;</span>
+      <span>{{ request.state.user.streak_days }}</span>
+    </div>
+  </header>
+
+  <nav class="utility-nav">
+    <a href="/vocabulary">Vocabulary</a>
+    <a href="/grammar">Grammar</a>
+    <a href="/pronunciation">Pronunciation</a>
     <form action="/logout" method="post" class="logout-form">
       <button type="submit" class="link-button">Log out</button>
     </form>
@@ -43,6 +48,28 @@
     {% block content %}{% endblock %}
   </main>
 
+  {% if request.state.user %}
+  <nav class="bottom-tabs">
+    <a href="/memory" class="tab-link {{ 'tab-active' if request.url.path == '/memory' else '' }}">
+      <span class="tab-icon" aria-hidden="true">&#128214;</span>
+      <span class="tab-label">Vandaag</span>
+    </a>
+    <a href="/conversation" class="tab-link {{ 'tab-active' if request.url.path == '/conversation' else '' }}">
+      <span class="tab-icon" aria-hidden="true">&#128172;</span>
+      <span class="tab-label">Gesprek</span>
+    </a>
+    <a href="/progress" class="tab-link {{ 'tab-active' if request.url.path == '/progress' else '' }}">
+      <span class="tab-icon" aria-hidden="true">&#128200;</span>
+      <span class="tab-label">Voortgang</span>
+    </a>
+    <a href="/" class="tab-link {{ 'tab-active' if request.url.path == '/' else '' }}">
+      <span class="tab-icon" aria-hidden="true">&#128197;</span>
+      <span class="tab-label">Kurikulum</span>
+    </a>
+  </nav>
+  {% endif %}
+
+  <script src="/static/js/tts.js"></script>
   {% block scripts %}{% endblock %}
 </body>
 </html>

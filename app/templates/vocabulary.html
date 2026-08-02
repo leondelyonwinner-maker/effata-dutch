@@ -27,10 +27,17 @@
       {% if item.usage_context %}
       <p class="vocab-context">{{ item.usage_context }}</p>
       {% endif %}
+      <button type="button" class="tts-btn" data-speak-nl="{{ item.dutch }}">&#128266; Dengar</button>
+      {% with target_text = item.dutch %}
+        {% include "partials/pronunciation_widget.html" %}
+      {% endwith %}
     </div>
     {% endfor %}
   </div>
   {% endfor %}
 </section>
 {% endfor %}
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/pronunciation.js"></script>
 {% endblock %}

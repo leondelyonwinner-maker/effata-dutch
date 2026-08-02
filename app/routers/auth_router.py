@@ -6,10 +6,11 @@ from app.auth import (
     client_ip,
     create_session_token,
     generate_csrf_token,
+    get_user_by_username,
     is_ip_locked_out,
     record_login_attempt,
     verify_csrf,
-    verify_passcode,
+    verify_user_passcode,
 )
 from app.config import get_settings
 from app.db import get_db
@@ -23,7 +24,7 @@ settings = get_settings()
 async def login_form(request: Request):
     csrf_token = generate_csrf_token()
     response = templates.TemplateResponse(
-        "login.html", {"request": request, "csrf_token": csrf_token, "error": None}
+        "login.html", {"request": request, "csrf_token": csrf_token, "error": None, "username_value": ""}
     )
     response.set_cookie(
         "csrf_token",
@@ -39,6 +40,7 @@ async def login_form(request: Request):
 @router.post("/login")
 async def login_submit(
     request: Request,
+    username: str = Form(...),
     passcode: str = Form(...),
     csrf_token: str = Form(...),
     db: AsyncSession = Depends(get_db),
@@ -53,15 +55,22 @@ async def login_submit(
                 "request": request,
                 "csrf_token": csrf_token,
                 "error": "Too many failed attempts. Please wait a few minutes before trying again.",
+                "username_value": username,
             },
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
         )
 
-    if not verify_passcode(passcode):
+    user = await get_user_by_username(db, username)
+    if user is None or not verify_user_passcode(user, passcode):
         await record_login_attempt(db, ip, success=False)
         return templates.TemplateResponse(
             "login.html",
-            {"request": request, "csrf_token": csrf_token, "error": "Incorrect passcode."},
+            {
+                "request": request,
+                "csrf_token": csrf_token,
+                "error": "Incorrect username or passcode.",
+                "username_value": username,
+            },
             status_code=status.HTTP_401_UNAUTHORIZED,
         )
 
@@ -69,7 +78,7 @@ async def login_submit(
     response = RedirectResponse(url="/", status_code=status.HTTP_303_SEE_OTHER)
     response.set_cookie(
         settings.session_cookie_name,
-        create_session_token(),
+        create_session_token(user.id),
         httponly=True,
         samesite="lax",
         secure=settings.is_production,

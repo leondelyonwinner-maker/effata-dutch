@@ -1,24 +1,38 @@
 {% extends "base.html" %}
-{% block title %}Roadmap — Effata Dutch{% endblock %}
+{% block title %}Kurikulum — Effata Dutch{% endblock %}
 {% block content %}
-<h1>10-Week Fluency Roadmap</h1>
-<p class="subtitle">Beginner &rarr; conversational fluency for relocation, work, travel, and preaching.</p>
+<h1>Kurikulum</h1>
+<p class="subtitle">Beginner &rarr; conversational fluency: engineering, presentaties, sehari-hari, belanja, komunitas, dan berkhotbah.</p>
 
 {% if due_count > 0 %}
 <a href="/memory" class="callout">
-  <strong>{{ due_count }}</strong> card{{ "s" if due_count != 1 else "" }} due for review right now &rarr;
+  <strong>{{ due_count }}</strong> kartu review menunggu &rarr;
 </a>
 {% else %}
-<div class="callout callout-muted">No reviews due right now. Nice work staying on top of it.</div>
+<div class="callout callout-muted">Tidak ada review saat ini. Kerja bagus!</div>
 {% endif %}
 
 <div class="week-list">
-  {% for week in weeks %}
-  <div class="week-card">
-    <div class="week-number">Week {{ week.week_number }}</div>
-    <h2>{{ week.title }}</h2>
-    <p>{{ week.goal }}</p>
-    <p class="module-focus">{{ week.module_focus }}</p>
+  {% for row in week_rows %}
+  <div class="week-card {{ '' if row.unlocked else 'week-card-locked' }}">
+    <div class="week-card-header">
+      <span class="week-number">Minggu {{ row.week.week_number }}</span>
+      {% if not row.unlocked %}<span class="week-lock" aria-hidden="true">&#128274;</span>{% endif %}
+    </div>
+    <h2>{{ row.week.title }}</h2>
+    <p>{{ row.week.goal }}</p>
+    <p class="module-focus">{{ row.week.module_focus }}</p>
+    {% if row.total > 0 %}
+    <div class="week-progress-row">
+      <div class="progress-bar-track progress-bar-track-sm">
+        <div class="progress-bar-fill" style="width: {{ (row.done / row.total * 100) }}%"></div>
+      </div>
+      <span class="week-progress-count">{{ row.done }}/{{ row.total }} kata</span>
+    </div>
+    {% endif %}
+    {% if row.unlocked and row.total > 0 %}
+    <a href="/vocabulary" class="week-card-link">Buka kosakata &rarr;</a>
+    {% endif %}
   </div>
   {% endfor %}
 </div>

@@ -15,6 +15,7 @@ import enum
 
 from sqlalchemy import (
     Boolean,
+    Date,
     DateTime,
     Enum,
     Float,
@@ -30,6 +31,37 @@ from app.db import Base
 
 def _utcnow() -> dt.datetime:
     return dt.datetime.now(dt.timezone.utc)
+
+
+class User(Base):
+    """One learner. Provisioned via `python -m app.cli create-user`, never
+    through a public signup form -- see app/auth.py docstring for the threat
+    model this app operates under."""
+
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    username: Mapped[str] = mapped_column(String(64), unique=True, index=True)
+    display_name: Mapped[str] = mapped_column(String(120))
+    passcode_hash: Mapped[str] = mapped_column(String(255))
+    created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+    # Gamification (Voortgang tab). Kept as plain counters on User rather
+    # than derived-on-read from ReviewLog, because streak/XP need to be
+    # cheap to read on every dashboard load and their update rules (streak
+    # resets on a missed day, XP is monotonic) don't map cleanly onto a
+    # pure aggregate query anyway.
+    xp: Mapped[int] = mapped_column(Integer, default=0)
+    streak_days: Mapped[int] = mapped_column(Integer, default=0)
+    last_study_date: Mapped[dt.date | None] = mapped_column(Date, nullable=True)
+
+    srs_cards: Mapped[list["SRSCard"]] = relationship(back_populates="user", cascade="all, delete-orphan")
+    conversation_sessions: Mapped[list["ConversationSession"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )
+    pronunciation_attempts: Mapped[list["PronunciationAttempt"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )
 
 
 class CurriculumWeek(Base):
@@ -112,12 +144,14 @@ class ConversationSession(Base):
     __tablename__ = "conversation_sessions"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
     scenario: Mapped[str] = mapped_column(String(200), default="Algemeen gesprek")
     difficulty: Mapped[ConversationDifficulty] = mapped_column(
         Enum(ConversationDifficulty), default=ConversationDifficulty.beginner
     )
     started_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
 
+    user: Mapped[User] = relationship(back_populates="conversation_sessions")
     messages: Mapped[list["ConversationMessage"]] = relationship(
         back_populates="session", cascade="all, delete-orphan", order_by="ConversationMessage.created_at"
     )
@@ -149,11 +183,13 @@ class SRSCard(Base):
     # Note: NOT a DB-level "exactly one of the two FKs is set" guarantee --
     # standard SQL treats NULL as distinct from NULL in unique indexes, so a
     # composite UNIQUE constraint here wouldn't actually enforce that
-    # invariant. It's enforced at the application layer instead: app/seed.py
-    # always creates exactly one SRSCard per vocab item or grammar exercise,
-    # never both.
+    # invariant. It's enforced at the application layer instead: app/cli.py's
+    # create-user/sync-srs-cards commands always create exactly one SRSCard
+    # per (user, vocab item) or (user, grammar exercise) pair, never both FKs
+    # set on the same row.
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
     vocab_item_id: Mapped[int | None] = mapped_column(ForeignKey("vocab_items.id"), nullable=True)
     grammar_exercise_id: Mapped[int | None] = mapped_column(ForeignKey("grammar_exercises.id"), nullable=True)
 
@@ -163,6 +199,7 @@ class SRSCard(Base):
     due_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
     last_reviewed_at: Mapped[dt.datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
+    user: Mapped[User] = relationship(back_populates="srs_cards")
     vocab_item: Mapped[VocabItem | None] = relationship(back_populates="srs_cards")
     grammar_exercise: Mapped[GrammarExercise | None] = relationship(back_populates="srs_cards")
     review_logs: Mapped[list["ReviewLog"]] = relationship(back_populates="card", cascade="all, delete-orphan")
@@ -177,6 +214,25 @@ class ReviewLog(Base):
     reviewed_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
 
     card: Mapped[SRSCard] = relationship(back_populates="review_logs")
+
+
+class PronunciationAttempt(Base):
+    """One 'Ucapkan kata ini' attempt: browser Web Speech API transcribes
+    what the user said, server scores it against the target text (see
+    app/pronunciation_scoring.py) and logs it here for the Voortgang tab's
+    accuracy average. This is a clarity PROXY (transcript-similarity), not
+    phoneme-level pronunciation assessment -- see scoring module docstring."""
+
+    __tablename__ = "pronunciation_attempts"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    target_text: Mapped[str] = mapped_column(String(300))
+    transcript: Mapped[str] = mapped_column(String(300))
+    score: Mapped[int] = mapped_column(Integer)  # 0-100
+    created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=_utcnow)
+
+    user: Mapped[User] = relationship(back_populates="pronunciation_attempts")
 
 
 class LoginAttempt(Base):

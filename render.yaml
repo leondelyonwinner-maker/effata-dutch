@@ -21,10 +21,11 @@ services:
           property: connectionString
       - key: SESSION_SECRET_KEY
         generateValue: true
-      - key: APP_PASSCODE_HASH
-        sync: false # set manually: output of `python -m app.cli hash-passcode "..."`
       - key: DEEPSEEK_API_KEY
         sync: false # set manually in the Render dashboard, never committed
+      # User accounts are NOT env vars -- after the first deploy, open a
+      # Render shell against this service and run, once per learner:
+      #   python -m app.cli create-user <username> "<Display Name>" "<passcode>"
 
 databases:
   - name: effata-dutch-db

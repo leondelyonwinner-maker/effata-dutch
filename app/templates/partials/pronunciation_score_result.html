@@ -1,0 +1,8 @@
+<div class="pron-score-card {{ tier.css_class }}">
+  <span class="pron-score-value">{{ score }}%</span>
+  <span class="pron-score-label">{{ tier.label }}</span>
+  <div class="pron-diff">
+    {% for w in diff %}<span class="{{ 'pron-word-match' if w.matched else 'pron-word-miss' }}">{{ w.word }}</span>{% endfor %}
+  </div>
+  <span class="pron-transcript">Terdengar sebagai: &ldquo;{{ transcript }}&rdquo;</span>
+</div>

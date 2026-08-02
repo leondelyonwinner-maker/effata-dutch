@@ -10,7 +10,8 @@ from sqlalchemy.orm import selectinload
 from app.auth import generate_csrf_token, require_login, verify_csrf
 from app.config import get_settings
 from app.db import get_db
-from app.models import SRSCard, ReviewLog
+from app.gamification import KNOWN_GRADE_THRESHOLD, XP_KNOWN, XP_UNKNOWN, bump_streak_and_xp
+from app.models import SRSCard, ReviewLog, User
 from app.srs import schedule_next_review
 from app.templating import templates
 
@@ -18,20 +19,20 @@ router = APIRouter(prefix="/memory", tags=["memory"], dependencies=[Depends(requ
 settings = get_settings()
 
 
-async def _due_card(db: AsyncSession) -> SRSCard | None:
+async def _due_card(db: AsyncSession, user_id: int) -> SRSCard | None:
     now = dt.datetime.now(dt.timezone.utc)
     result = await db.execute(
         select(SRSCard)
         .options(selectinload(SRSCard.vocab_item), selectinload(SRSCard.grammar_exercise))
-        .where(SRSCard.due_at <= now)
+        .where(SRSCard.user_id == user_id, SRSCard.due_at <= now)
         .order_by(SRSCard.due_at)
         .limit(1)
     )
     return result.scalars().first()
 
 
-async def _card_context(db: AsyncSession) -> dict:
-    card = await _due_card(db)
+async def _card_context(db: AsyncSession, user_id: int) -> dict:
+    card = await _due_card(db, user_id)
     front, back, card_type = None, None, None
     if card is not None:
         if card.vocab_item is not None:
@@ -47,9 +48,11 @@ async def _card_context(db: AsyncSession) -> dict:
 
 
 @router.get("", response_class=HTMLResponse)
-async def review_queue(request: Request, db: AsyncSession = Depends(get_db)):
+async def review_queue(
+    request: Request, current_user: User = Depends(require_login), db: AsyncSession = Depends(get_db)
+):
     csrf_token = generate_csrf_token()
-    context = await _card_context(db)
+    context = await _card_context(db, current_user.id)
     response = templates.TemplateResponse(
         "memory.html", {"request": request, "csrf_token": csrf_token, **context}
     )
@@ -65,6 +68,7 @@ async def grade_card(
     request: Request,
     grade: int = Form(...),
     csrf_token: str = Form(...),
+    current_user: User = Depends(require_login),
     db: AsyncSession = Depends(get_db),
 ):
     await verify_csrf(request, csrf_token)
@@ -73,18 +77,24 @@ async def grade_card(
         raise HTTPException(status_code=422, detail="grade must be 0-5")
 
     card = await db.get(SRSCard, card_id)
-    if card is None:
+    # 404 (not 403) for both "doesn't exist" and "belongs to someone else" --
+    # a guessed id shouldn't let a caller distinguish the two cases.
+    if card is None or card.user_id != current_user.id:
         raise HTTPException(status_code=404, detail="Card not found")
 
     schedule_next_review(card, grade)
     db.add(ReviewLog(card_id=card.id, grade=grade))
+
+    xp_delta = XP_KNOWN if grade >= KNOWN_GRADE_THRESHOLD else XP_UNKNOWN
+    bump_streak_and_xp(current_user, xp_delta=xp_delta)
+
     await db.commit()
 
     # Respond with just the review-card fragment (HTMX outerHTML swap target),
     # not the full page -- re-fetching CSRF token since the form that triggered
     # this POST doesn't carry a fresh one for the next card.
     new_csrf_token = generate_csrf_token()
-    context = await _card_context(db)
+    context = await _card_context(db, current_user.id)
     response = templates.TemplateResponse(
         "partials/review_card.html", {"request": request, "csrf_token": new_csrf_token, **context}
     )

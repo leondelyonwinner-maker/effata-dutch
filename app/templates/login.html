@@ -11,8 +11,14 @@
 
   <form method="post" action="/login" autocomplete="off">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label for="username">Username</label>
+    <input
+      type="text" id="username" name="username" required autofocus
+      autocapitalize="none" autocorrect="off" spellcheck="false"
+      value="{{ username_value }}"
+    >
     <label for="passcode">Passcode</label>
-    <input type="password" id="passcode" name="passcode" required autofocus inputmode="text">
+    <input type="password" id="passcode" name="passcode" required inputmode="text">
     <button type="submit">Log in</button>
   </form>
 </div>

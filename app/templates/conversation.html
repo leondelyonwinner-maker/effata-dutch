@@ -1,8 +1,23 @@
 {% extends "base.html" %}
-{% block title %}Conversation — Effata Dutch{% endblock %}
+{% block title %}Gesprek — Effata Dutch{% endblock %}
 {% block content %}
-<h1>Conversation Simulator</h1>
-<p class="subtitle">Chat with Coach Effata in Dutch. Current level: <strong>{{ session.difficulty.value }}</strong></p>
+<h1>Gesprek</h1>
+<p class="subtitle">
+  Topik: <strong>{{ session.scenario }}</strong> &middot; Level: <strong>{{ session.difficulty.value }}</strong>
+</p>
+
+<details class="scenario-picker">
+  <summary>Ganti topik</summary>
+  <div class="scenario-chip-list">
+    {% for s in scenarios %}
+    <form method="post" action="/conversation/new" class="scenario-chip-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input type="hidden" name="scenario" value="{{ s }}">
+      <button type="submit" class="scenario-chip {{ 'scenario-chip-active' if s == session.scenario else '' }}">{{ s }}</button>
+    </form>
+    {% endfor %}
+  </div>
+</details>
 
 <div id="chat-log" class="chat-log">
   {% for message in session.messages %}
@@ -17,10 +32,13 @@
   hx-swap="beforeend"
   class="chat-form">
   <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-  <input type="text" name="content" placeholder="Typ in het Nederlands..." required maxlength="2000" autocomplete="off">
+  <input type="text" id="chat-input" name="content" placeholder="Typ of spreek in het Nederlands..." required maxlength="2000" autocomplete="off">
+  <button type="button" id="chat-mic-btn" class="chat-mic-btn" hidden>&#127908;</button>
   <button type="submit">Send</button>
 </form>
+<p id="chat-mic-unsupported" class="empty-state" hidden>Speech input tidak didukung di browser ini -- ketik saja.</p>
 {% endblock %}
 {% block scripts %}
 <script src="/static/js/chat.js"></script>
+<script src="/static/js/conversation_mic.js"></script>
 {% endblock %}

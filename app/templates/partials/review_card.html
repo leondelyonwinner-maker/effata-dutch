@@ -6,10 +6,19 @@
 <div class="review-card" id="review-card">
   <div class="review-type">{{ "Vocabulary" if card_type == "vocab" else "Grammar" }}</div>
   <div class="review-front">{{ front }}</div>
+  {% if card_type == "vocab" %}
+  <button type="button" class="tts-btn" data-speak-nl="{{ front }}">&#128266; Dengar</button>
+  {% endif %}
 
   <details class="review-reveal">
     <summary>Show answer</summary>
     <div class="review-back">{{ back }}</div>
+
+    {% if card_type == "vocab" %}
+    {% with target_text = front %}
+      {% include "partials/pronunciation_widget.html" %}
+    {% endwith %}
+    {% endif %}
 
     <p class="review-grade-label">How well did you recall this?</p>
     <form
